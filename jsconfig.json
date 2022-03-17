@@ -10,6 +10,8 @@
 			"@context/*": ["context/*"],
 			"@styles/*": ["styles/*"],
 			"@hooks/*": ["hooks/*"],
+			"@common/*": ["common/*"],
+			"@layout/*": ["layout/*"],
 		}
 	}
 }
