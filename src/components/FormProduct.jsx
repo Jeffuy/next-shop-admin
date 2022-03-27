@@ -1,8 +1,10 @@
 import { useRef } from 'react';
-import { addProduct } from '@services/api/products';
+import { addProduct, updateProduct } from '@services/api/products';
+import { useRouter } from 'next/router';
 
-export default function FormProduct({ setOpen, setAlert }) {
+export default function FormProduct({ setOpen, setAlert, product }) {
 	const formRef = useRef(null);
+	const router = useRouter();
 
 	const handleSubmit = event => {
 		event.preventDefault();
@@ -14,25 +16,32 @@ export default function FormProduct({ setOpen, setAlert }) {
 			categoryId: parseInt(formData.get('category')),
 			images: [formData.get('images').name],
 		};
-		addProduct(data)
-			.then(() => {
-				setAlert({
-					active: true,
-					message: 'Product added successfully',
-					type: 'success',
-					autoClose: false,
-				});
-				setOpen(false);
-			})
-			.catch(error => {
-				setAlert({
-					active: true,
-					message: 'Error adding product',
-					type: 'error',
-					autoClose: false,
-				});
-				setOpen(false);
+
+		if (product) {
+			updateProduct(product.id, data).then(response => {
+				router.push('/dashboard/products/');
 			});
+		} else {
+			addProduct(data)
+				.then(() => {
+					setAlert({
+						active: true,
+						message: 'Product added successfully',
+						type: 'success',
+						autoClose: false,
+					});
+					setOpen(false);
+				})
+				.catch(error => {
+					setAlert({
+						active: true,
+						message: 'Error adding product',
+						type: 'error',
+						autoClose: false,
+					});
+					setOpen(false);
+				});
+		}
 	};
 
 	return (
@@ -44,13 +53,25 @@ export default function FormProduct({ setOpen, setAlert }) {
 							<label className="block text-sm font-medium text-gray-700" htmlFor="title">
 								Title
 							</label>
-							<input className="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md" id="title" name="title" type="text" />
+							<input
+								className="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
+								defaultValue={product?.title}
+								id="title"
+								name="title"
+								type="text"
+							/>
 						</div>
 						<div className="col-span-6 sm:col-span-3">
 							<label className="block text-sm font-medium text-gray-700" htmlFor="price">
 								Price
 							</label>
-							<input className="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md" id="price" name="price" type="number" />
+							<input
+								className="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
+								defaultValue={product?.price}
+								id="price"
+								name="price"
+								type="number"
+							/>
 						</div>
 						<div className="col-span-6">
 							<label className="block text-sm font-medium text-gray-700" htmlFor="category">
@@ -59,6 +80,7 @@ export default function FormProduct({ setOpen, setAlert }) {
 							<select
 								autoComplete="category-name"
 								className="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+								defaultValue={product?.category}
 								id="category"
 								name="category"
 							>
@@ -77,6 +99,7 @@ export default function FormProduct({ setOpen, setAlert }) {
 							<textarea
 								autoComplete="description"
 								className="form-textarea mt-1 block w-full mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
+								defaultValue={product?.description}
 								id="description"
 								name="description"
 								rows="3"
@@ -101,7 +124,7 @@ export default function FormProduct({ setOpen, setAlert }) {
 												htmlFor="images"
 											>
 												<span>Upload a file</span>
-												<input className="sr-only" id="images" name="images" type="file" />
+												<input className="sr-only" defaultValue={product?.images} id="images" name="images" type="file" />
 											</label>
 											<p className="pl-1">or drag and drop</p>
 										</div>

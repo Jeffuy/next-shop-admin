@@ -11,8 +11,8 @@ const endPoints = {
 		allProducts: `${API}/api/${VERSION}/products`,
 		getProduct: id => `${API}/api/${VERSION}/products/${id}`,
 		addProducts: `${API}/api/${VERSION}/products`,
-		updateProducts: id => `${API}/api/${VERSION}/products/${id}`,
-		deleteProducts: id => `${API}/api/${VERSION}/products/${id}`,
+		updateProduct: id => `${API}/api/${VERSION}/products/${id}`,
+		deleteProduct: id => `${API}/api/${VERSION}/products/${id}`,
 	},
 	users: {
 		getUsers: `${API}/api/${VERSION}/users`,
