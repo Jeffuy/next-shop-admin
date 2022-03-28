@@ -18,7 +18,7 @@ export default function FormProduct({ setOpen, setAlert, product }) {
 		};
 
 		if (product) {
-			updateProduct(product.id, data).then(response => {
+			updateProduct(product.id, data).then(() => {
 				router.push('/dashboard/products/');
 			});
 		} else {
